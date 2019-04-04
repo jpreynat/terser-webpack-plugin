@@ -119,14 +119,14 @@ describe('TerserPlugin', () => {
     expect(TerserPlugin.isSourceMap(emptyRawSourceMap)).toBe(true);
   });
 
-  it('buildSourceMap method', () => {
-    expect(TerserPlugin.buildSourceMap()).toBe(null);
-    expect(TerserPlugin.buildSourceMap('invalid')).toBe(null);
-    expect(TerserPlugin.buildSourceMap({})).toBe(null);
-    expect(TerserPlugin.buildSourceMap(rawSourceMap)).toMatchSnapshot();
+  it('buildSourceMap method', async () => {
+    expect(await TerserPlugin.buildSourceMap()).toBe(null);
+    expect(await TerserPlugin.buildSourceMap('invalid')).toBe(null);
+    expect(await TerserPlugin.buildSourceMap({})).toBe(null);
+    expect(await TerserPlugin.buildSourceMap(rawSourceMap)).toMatchSnapshot();
   });
 
-  it('buildError method', () => {
+  it('buildError method', async () => {
     const error = new Error('Message');
 
     error.stack = null;
@@ -143,7 +143,7 @@ describe('TerserPlugin', () => {
       TerserPlugin.buildError(
         errorWithLineAndCol,
         'test.js',
-        TerserPlugin.buildSourceMap(rawSourceMap)
+        await TerserPlugin.buildSourceMap(rawSourceMap)
       )
     ).toMatchSnapshot();
 
@@ -157,7 +157,7 @@ describe('TerserPlugin', () => {
       TerserPlugin.buildError(
         otherErrorWithLineAndCol,
         'test.js',
-        TerserPlugin.buildSourceMap(rawSourceMap),
+        await TerserPlugin.buildSourceMap(rawSourceMap),
         new RequestShortener('http://example.com/www/js/')
       )
     ).toMatchSnapshot();
@@ -171,7 +171,7 @@ describe('TerserPlugin', () => {
     ).toMatchSnapshot();
   });
 
-  it('buildWarning method', () => {
+  it('buildWarning method', async () => {
     expect(
       TerserPlugin.buildWarning('Warning [test.js:1,1]')
     ).toMatchSnapshot();
@@ -182,14 +182,14 @@ describe('TerserPlugin', () => {
       TerserPlugin.buildWarning(
         'Warning [test.js:1,1]',
         'test.js',
-        TerserPlugin.buildSourceMap(rawSourceMap)
+        await TerserPlugin.buildSourceMap(rawSourceMap)
       )
     ).toMatchSnapshot();
     expect(
       TerserPlugin.buildWarning(
         'Warning [test.js:1,1]',
         'test.js',
-        TerserPlugin.buildSourceMap(rawSourceMap),
+        await TerserPlugin.buildSourceMap(rawSourceMap),
         new RequestShortener('http://example.com/www/js/')
       )
     ).toMatchSnapshot();
@@ -197,7 +197,7 @@ describe('TerserPlugin', () => {
       TerserPlugin.buildWarning(
         'Warning [test.js:1,1]',
         'test.js',
-        TerserPlugin.buildSourceMap(rawSourceMap),
+        await TerserPlugin.buildSourceMap(rawSourceMap),
         new RequestShortener('http://example.com/www/js/'),
         () => true
       )
@@ -206,7 +206,7 @@ describe('TerserPlugin', () => {
       TerserPlugin.buildWarning(
         'Warning [test.js:1,1]',
         'test.js',
-        TerserPlugin.buildSourceMap(rawSourceMap),
+        await TerserPlugin.buildSourceMap(rawSourceMap),
         new RequestShortener('http://example.com/www/js/'),
         () => false
       )
